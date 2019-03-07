@@ -10,17 +10,30 @@ def parseargs():
     args = parser.parse_args()
     return args
 
-def recursive_xml(root):
+def recursive_delete_xml(root):
     if root.getchildren() is not None:
         for child in root.getchildren():
             if child.tag in ('description', 'writeConstraint', 'enumeratedValues'):
                 root.remove(child)
             else:
-                recursive_xml(child)
+                recursive_delete_xml(child)
+
+def recursive_hex_xml(root):
+    if root.getchildren() is not None:
+        for child in root.getchildren():
+            if child.tag == 'resetValue':
+                txt = child.text
+                try:
+                    val = int(txt, 0)
+                    child.text = "0x{:08X}".format(val)
+                except:
+                    print("WARN: Invalid literal {}".format(txt))
+                    child.text = txt
+            else:
+                recursive_hex_xml(child)
 
 def sort_svd(pp, down=True):
     for p in pp.iter("peripheral"):
-        print("\t"+p.findtext("name"))
         if 'derivedFrom' in p.attrib:
             continue
         rr = p.find("registers")
@@ -65,7 +78,8 @@ def main():
         svd = ET.parse(f)
 
     pp = svd.find('peripherals')
-    recursive_xml(pp)
+    recursive_delete_xml(pp)
+    recursive_hex_xml(pp)
     sort_svd(pp)
 
     # SVD should now be updated, write it out
