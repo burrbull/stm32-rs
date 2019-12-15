@@ -547,11 +547,15 @@ class Peripheral:
         for rtag, _, _ in registers[1:]:
             self.ptag.find('registers').remove(rtag)
         rtag = registers[0][0]
+        nametag = rtag.find('name')
         if 'name' in rmod:
             name = rmod['name']
         else:
             name = rspec[:li]+"%s"+rspec[len(rspec)-ri:]
-        rtag.find('name').text = name
+        if dimIndex[0] == "0":
+            desc = rtag.find('description')
+            desc.text = desc.text.replace(nametag.text[li:len(nametag.text)-ri], "%s")
+        nametag.text = name
         self.process_register(name, rmod)
         ET.SubElement(rtag, 'dim').text = str(dim)
         ET.SubElement(rtag, 'dimIndex').text = dimIndex
@@ -665,6 +669,10 @@ class Peripheral:
                     if not fspec.startswith("_"):
                         field = register[fspec]
                         r.process_field(pname, fspec, field)
+            # Handle field arrays
+            for fspec in register.get("_array", {}):
+                fmod = register["_array"][fspec]
+                r.collect_fields_in_array(fspec, fmod)
         if rcount == 0:
             raise MissingRegisterError("Could not find {}:{}"
                                        .format(pname, rspec))
@@ -734,6 +742,52 @@ class Register:
         ET.SubElement(fnew, 'description').text = desc
         ET.SubElement(fnew, 'bitOffset').text = str(bitoffset)
         ET.SubElement(fnew, 'bitWidth').text = str(bitwidth)
+
+    def collect_fields_in_array(self, fspec, fmod):
+        """Collect same fields in peripheral into register array."""
+        fields = []
+        li, ri = spec_ind(fspec)
+        for ftag in list(self.iter_fields(fspec)):
+            fname = ftag.findtext('name')
+            fields.append([ftag, fname[li:len(fname)-ri],
+                              int(ftag.findtext('bitOffset'), 0)])
+        dim = len(fields)
+        if dim == 0:
+            raise SvdPatchError("{}: fields {} not found"
+                                .format(self.rtag.findtext('name'), fspec))
+        fields = sorted(fields, key=lambda f: f[2])
+
+        if fmod.get('_start_from_zero', ""):
+            dimIndex = ",".join([str(i) for i in range(dim)])
+        else:
+            if dim == 1:
+                dimIndex = "{0}-{0}".format(fields[0][1])
+            else:
+                dimIndex = ",".join(f[1] for f in fields)
+        offsets = [f[2] for f in fields]
+        dimIncrement = 0
+        if dim > 1:
+            dimIncrement = offsets[1]-offsets[0]
+
+        if not check_offsets(offsets, dimIncrement):
+            raise SvdPatchError(
+                "{}: fields cannot be collected into {} array"
+                .format(self.rtag.findtext('name'), fspec))
+        for ftag, _, _ in fields[1:]:
+            self.rtag.find('fields').remove(ftag)
+        ftag = fields[0][0]
+        nametag = ftag.find('name')
+        if 'name' in fmod:
+            name = fmod['name']
+        else:
+            name = fspec[:li]+"%s"+fspec[len(fspec)-ri:]
+        desc = ftag.find('description')
+        desc.text = desc.text.replace(nametag.text[li:len(nametag.text)-ri], "%s")
+        nametag.text = name
+        #self.process_field(name, fmod)
+        ET.SubElement(ftag, 'dim').text = str(dim)
+        ET.SubElement(ftag, 'dimIndex').text = dimIndex
+        ET.SubElement(ftag, 'dimIncrement').text = hex(dimIncrement)
 
     def split_fields(self, fspec):
         """split all fspec in rtag."""

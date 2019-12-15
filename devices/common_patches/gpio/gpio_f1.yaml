@@ -1,0 +1,21 @@
+"GPIO*":
+  IDR:
+    _array:
+      "IDR*": {}
+  ODR:
+    _array:
+      "ODR*": {}
+  BSRR:
+    _array:
+      "BR*": {}
+      "BS*": {}
+  BRR:
+    _array:
+      "BR*": {}
+  LCKR:
+    _array:
+      "LCK[0123456789],LCK1[012345]": {}
+  "CRL,CRH":
+    _array:
+      CNF*: {}
+      MODE*: {}
