@@ -5,8 +5,9 @@ all: patch svd2rust
 
 SHELL := /usr/bin/env bash
 
-CRATES ?= stm32f0 stm32f1 stm32f2 stm32f3 stm32f4 stm32f7 stm32h7 \
-          stm32l0 stm32l1 stm32l4 stm32g0 stm32g4
+CRATES ?= stm32f1
+#stm32f0 stm32f1 stm32f2 stm32f3 stm32f4 stm32f7 stm32h7 \
+#          stm32l0 stm32l1 stm32l4 stm32g0 stm32g4
 
 # All yaml files in devices/ will be used to patch an SVD
 YAMLS := $(foreach crate, $(CRATES), \
@@ -44,7 +45,7 @@ svd/%.svd.formatted: svd/%.svd.patched
 define crate_template
 $(1)/src/%/mod.rs: svd/%.svd.patched
 	mkdir -p $$(@D)
-	cd $$(@D); svd2rust -g -i ../../../$$<
+	cd $$(@D); /home/burrbull/builds/svd2rust/release/svd2rust -g -i ../../../$$<
 	rustfmt --config-path="rustfmt.toml" $$(@D)/lib.rs
 	sed "1,10d" $$(@D)/lib.rs > $$@
 	rm $$(@D)/build.rs $$(@D)/lib.rs

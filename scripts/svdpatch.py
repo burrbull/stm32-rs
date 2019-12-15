@@ -827,7 +827,10 @@ class Register:
         """Add an enumeratedValues given by field to all fspec in rtag."""
         derived = None
         for ftag in self.iter_fields(fspec):
-            name = ftag.find('name').text
+            if "_derivedFrom" in field:
+                derived = make_derived_enumerated_values(field["_derivedFrom"])
+            else:
+                name = ftag.find('name').text
             if derived is None:
                 enum = make_enumerated_values(name, field, usage=usage)
                 enum_name = enum.find('name').text

@@ -28,7 +28,7 @@
     "LCKK":
       NotActive: [0, "Port configuration lock key not active"]
       Active: [1, "Port configuration lock key active"]
-  "CRL,CRH":
+  CRL:
     CNF*:
       PushPull: [0, "Analog mode / Push-Pull mode"]
       OpenDrain: [1, "Floating input (reset state) / Open Drain-Mode"]
@@ -39,4 +39,9 @@
       Output: [1, "Output mode 10 MHz"]
       Output2: [2, "Output mode 2 MHz"]
       Output50: [3, "Output mode 50 MHz"]
+  CRH:
+    CNF*:
+      _derivedFrom: "CRL.CNF%s.CNF0"
+    MODE*:
+      _derivedFrom: "CRL.MODE%s.MODE0"
 

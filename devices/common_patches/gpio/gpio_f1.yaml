@@ -15,7 +15,11 @@
   LCKR:
     _array:
       "LCK[0123456789],LCK1[012345]": {}
-  "CRL,CRH":
+  CRL:
+    _array:
+      CNF*: {}
+      MODE*: {}
+  CRH:
     _array:
       CNF*: {}
       MODE*: {}
