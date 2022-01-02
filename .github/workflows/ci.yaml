@@ -41,38 +41,23 @@ jobs:
           profile: minimal
           override: true
           components: rustfmt
-      - name: Install xmllint
-        run: sudo apt-get install libxml2-utils
-      - name: Install Python dependencies
-        run: |
-          pip3 install --user setuptools wheel
-          pip3 install --user svdtools
-      - name: Put pip binary directory into path
-        run: echo "~/.local/bin" >> $GITHUB_PATH
-      - name: Cache Cargo installed binaries
-        uses: actions/cache@v1
-        id: cache-cargo
-        with:
-          path: ~/cargo-bin
-          key: ${{ runner.os }}-svd2rust-0.20.0
       - name: Install svd2rust
-        if: steps.cache-cargo.outputs.cache-hit != 'true'
         uses: actions-rs/install@v0.1
         with:
           crate: svd2rust
           version: 0.20.0
-      - name: Copy svd2rust to cache directory
-        if: steps.cache-cargo.outputs.cache-hit != 'true'
-        run: |
-          mkdir ~/cargo-bin
-          cp ~/.cargo/bin/svd2rust ~/cargo-bin
+          use-tool-cache: true
+      - name: Install svdtools
+        uses: actions-rs/install@v0.1
+        with:
+          crate: svdtools
+          version: 0.1.0
+          use-tool-cache: true
       - name: Put new cargo binary directory into path
         run: echo "~/cargo-bin" >> $GITHUB_PATH
       - name: Patch SVDs
-        run: make -j2 patch
-      - name: Check SVDs
-        run: make lint
+        run: SVDTOOLS=svdtools make -j2 patch
       - name: Build PACs
-        run: make -j2 svd2rust
+        run: SVDTOOLS=svdtools make -j2 svd2rust
       - name: Check PACs
-        run: make -j2 check
+        run: SVDTOOLS=svdtools make -j2 check
