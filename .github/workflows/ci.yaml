@@ -10,48 +10,9 @@ on:
   pull_request:
 
 jobs:
-  install-deps:
-    name: Install svdtools & svd2rust
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-          components: rustfmt
-
-      - name: Add fictive crate
-        run: |
-          cargo init
-
-      - name: Cache dependencies
-        uses: Swatinem/rust-cache@v1
-        with:
-          sharedKey: prebuilded-svdtools-${{ env.SVDTOOLS_VERSION }}-svd2rust-${{ env.SVD2RUST_VERSION }}
-
-      - name: Install tools
-        run: |
-          cargo install svdtools --version $SVDTOOLS_VERSION --target-dir deps-target
-          cargo install svd2rust --version $SVD2RUST_VERSION --target-dir deps-target
-          rm -rf deps-target
-
-      - name: Install dependencies
-        run: |
-          echo 'bare-metal = "1.0.0"' >> Cargo.toml
-          echo 'vcell = "0.1.3"' >> Cargo.toml
-          echo 'cortex-m = "0.7.2"' >> Cargo.toml
-          echo 'cortex-m-rt = "0.7.1"' >> Cargo.toml
-          cargo check
-
   check:
     name: Check
     runs-on: ubuntu-latest
-    needs: [install-deps]
     strategy:
       matrix:
         crate:
@@ -89,14 +50,16 @@ jobs:
           override: true
           components: rustfmt
 
-      - name: Add fictive crate
-        run: |
-          cargo init
-
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v1
         with:
-          sharedKey: prebuilded-svdtools-${{ env.SVDTOOLS_VERSION }}-svd2rust-${{ env.SVD2RUST_VERSION }}
+          working-directory: ${GITHUB_WORKSPACE}/${{ matrix.crate }}
+
+      - name: Install tools
+        run: |
+          cargo install svdtools --version $SVDTOOLS_VERSION --target-dir deps-target
+          cargo install svd2rust --version $SVD2RUST_VERSION --target-dir deps-target
+          rm -rf deps-target
 
       - name: Patch SVDs
         run: make -j2 patch
