@@ -32,12 +32,13 @@ jobs:
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v1
         with:
-          sharedKey: prebuilded-${{ env.SVDTOOLS_VERSION }}-${{ env.SVD2RUST_VERSION }}
+          sharedKey: prebuilded-svdtools-${{ env.SVDTOOLS_VERSION }}-svd2rust-${{ env.SVD2RUST_VERSION }}
 
       - name: Install dependencies
         run: |
           cargo install svdtools --version $SVDTOOLS_VERSION --target-dir target
           cargo install svd2rust --version $SVD2RUST_VERSION --target-dir target
+          rm -rf target
 
   check:
     name: Check
@@ -80,10 +81,10 @@ jobs:
           override: true
           components: rustfmt
 
-      - name: Cache
+      - name: Cache dependencies
         uses: Swatinem/rust-cache@v1
         with:
-          sharedKey: prebuilded-${{ env.SVDTOOLS_VERSION }}-${{ env.SVD2RUST_VERSION }}
+          sharedKey: prebuilded-svdtools-${{ env.SVDTOOLS_VERSION }}-svd2rust-${{ env.SVD2RUST_VERSION }}
 
       - name: Patch SVDs
         run: make -j2 patch
