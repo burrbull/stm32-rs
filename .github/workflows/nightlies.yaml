@@ -3,6 +3,7 @@ name: build nightlies
 env:
   SVDTOOLS_VERSION: 0.2.0
   SVD2RUST_VERSION: 0.21.0
+  FORM_VERSION: 0.8.0
 
 on:
   push:
@@ -42,8 +43,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cargo install svdtools --version $SVDTOOLS_VERSION --target-dir target
-          cargo install svd2rust --version $SVD2RUST_VERSION --target-dir target
+          cargo install svdtools --version $SVDTOOLS_VERSION --target-dir deps-target
+          cargo install svd2rust --version $SVD2RUST_VERSION --target-dir deps-target
+          cargo install form --version $form_VERSION --target-dir deps-target
+          rm -rf deps-target
 
       - name: Deploy SSH key
         run: |

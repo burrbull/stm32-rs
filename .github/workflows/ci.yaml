@@ -57,6 +57,7 @@ jobs:
         uses: Swatinem/rust-cache@v1
         with:
           working-directory: ${{ matrix.crate }}
+          key: svdtools-${{ env.SVDTOOLS_VERSION }}-svd2tust-${{ env.SVD2RUST_VERSION }}
 
       - name: Install tools
         run: |
