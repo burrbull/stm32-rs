@@ -34,11 +34,19 @@ jobs:
         with:
           sharedKey: prebuilded-svdtools-${{ env.SVDTOOLS_VERSION }}-svd2rust-${{ env.SVD2RUST_VERSION }}
 
-      - name: Install dependencies
+      - name: Install tools
         run: |
           cargo install svdtools --version $SVDTOOLS_VERSION --target-dir deps-target
           cargo install svd2rust --version $SVD2RUST_VERSION --target-dir deps-target
           rm -rf deps-target
+
+      - name: Install dependencies
+        run: |
+          echo 'bare-metal = "1.0.0"' >> Cargo.toml
+          echo 'vcell = "0.1.3"' >> Cargo.toml
+          echo 'cortex-m = "0.7.2"' >> Cargo.toml
+          echo 'cortex-m-rt = "0.7.1"' >> Cargo.toml
+          cargo check
 
   check:
     name: Check
