@@ -50,10 +50,14 @@ jobs:
           override: true
           components: rustfmt
 
+      - name: Create working dir
+        run: |
+          mkdir ${{ matrix.crate }}
+
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v1
         with:
-          working-directory: /home/runner/work/stm32-rs/stm32-rs/${{ matrix.crate }}
+          working-directory: ${{ matrix.crate }}
 
       - name: Install tools
         run: |
