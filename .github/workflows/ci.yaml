@@ -1,5 +1,9 @@
 name: CI
 
+env:
+  SVDTOOLS_VERSION: 0.2.0
+  SVD2RUST_VERSION: 0.21.0
+
 on:
   push:
     branches: [ staging, trying, master ]
@@ -24,19 +28,16 @@ jobs:
       - name: Add fictive crate
         run: |
           cargo init
-          echo 'svdtools = "0.2.0"' >> Cargo.toml
-          echo 'svd2rust = "0.21.0"' >> Cargo.toml
 
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v1
         with:
-          sharedKey: prebuilded
+          sharedKey: prebuilded-${{ env.SVDTOOLS_VERSION }}-${{ env.SVD2RUST_VERSION }}
 
       - name: Install dependencies
         run: |
-          cargo build --release
-          cargo install svdtools --version 0.2.0 --target-dir target
-          cargo install svd2rust --version 0.21.0 --target-dir target
+          cargo install svdtools --version $SVDTOOLS_VERSION --target-dir target
+          cargo install svd2rust --version $SVD2RUST_VERSION --target-dir target
 
   check:
     name: Check
@@ -82,7 +83,7 @@ jobs:
       - name: Cache
         uses: Swatinem/rust-cache@v1
         with:
-          sharedKey: prebuilded
+          sharedKey: prebuilded-${{ env.SVDTOOLS_VERSION }}-${{ env.SVD2RUST_VERSION }}
 
       - name: Patch SVDs
         run: make -j2 patch
