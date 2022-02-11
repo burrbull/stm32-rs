@@ -6,9 +6,42 @@ on:
   pull_request:
 
 jobs:
+  install-deps:
+    name: Install svdtools & svd2rust
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          components: rustfmt
+
+      - name: Add fictive crate
+        run: |
+          cargo init
+          echo 'svdtools = "0.2.0"' >> Cargo.toml
+          echo 'svd2rust = "0.21.0"' >> Cargo.toml
+
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v1
+        with:
+          sharedKey: prebuilded
+
+      - name: Install dependencies
+        run: |
+          cargo build --release
+          cargo install svdtools --version 0.2.0 --target-dir target
+          cargo install svd2rust --version 0.21.0 --target-dir target
+
   check:
     name: Check
     runs-on: ubuntu-latest
+    needs: [install-deps]
     strategy:
       matrix:
         crate:
@@ -28,12 +61,16 @@ jobs:
           - stm32mp1
           - stm32wl
           - stm32wb
+
     env:
       CRATES: ${{ matrix.crate }}
       CARGO_INCREMENTAL: 0
+      SVDTOOLS: svdtools
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -41,38 +78,17 @@ jobs:
           profile: minimal
           override: true
           components: rustfmt
-      - name: Install xmllint
-        run: sudo apt-get install libxml2-utils
-      - name: Install Python dependencies
-        run: |
-          pip3 install --user setuptools wheel
-          pip3 install --user svdtools
-      - name: Put pip binary directory into path
-        run: echo "~/.local/bin" >> $GITHUB_PATH
-      - name: Cache Cargo installed binaries
-        uses: actions/cache@v1
-        id: cache-cargo
+
+      - name: Cache
+        uses: Swatinem/rust-cache@v1
         with:
-          path: ~/cargo-bin
-          key: ${{ runner.os }}-svd2rust-0.21.0
-      - name: Install svd2rust
-        if: steps.cache-cargo.outputs.cache-hit != 'true'
-        uses: actions-rs/install@v0.1
-        with:
-          crate: svd2rust
-          version: 0.21.0
-      - name: Copy svd2rust to cache directory
-        if: steps.cache-cargo.outputs.cache-hit != 'true'
-        run: |
-          mkdir ~/cargo-bin
-          cp ~/.cargo/bin/svd2rust ~/cargo-bin
-      - name: Put new cargo binary directory into path
-        run: echo "~/cargo-bin" >> $GITHUB_PATH
+          sharedKey: prebuilded
+
       - name: Patch SVDs
         run: make -j2 patch
-      - name: Check SVDs
-        run: make lint
+
       - name: Build PACs
         run: make -j2 svd2rust
+
       - name: Check PACs
         run: make -j2 check

@@ -8,6 +8,10 @@ jobs:
     name: Compare mmaps
     runs-on: ubuntu-18.04
     continue-on-error: true
+
+    env:
+      SVDTOOLS: svdtools
+
     steps:
       - name: Checkout master
         uses: actions/checkout@v2
@@ -46,7 +50,7 @@ jobs:
           cd ../master
           rm -rf devices peripherals
           mv ../pr/devices ../pr/peripherals .
-          SVDTOOLS=svdtools make -j2 mmaps
+          make -j2 mmaps
 
           # Use the new mmaps to make a commit in the mmaps repo
           mv mmaps/* ../mmaps/

@@ -9,6 +9,10 @@ jobs:
   build:
     name: Build mmaps
     runs-on: ubuntu-18.04
+
+    env:
+      SVDTOOLS: svdtools
+
     steps:
       - name: Checkout stm32-rs
         uses: actions/checkout@v2
@@ -33,7 +37,7 @@ jobs:
         run: |
           cd stm32-rs
           COMMIT=$(git rev-parse HEAD)
-          SVDTOOLS=svdtools make -j2 mmaps
+          make -j2 mmaps
           mv mmaps/* ../stm32-rs-mmaps/
           cd ../stm32-rs-mmaps
           git config user.name "stm32-rs builder"
