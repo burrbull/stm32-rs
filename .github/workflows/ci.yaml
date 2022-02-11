@@ -50,9 +50,8 @@ jobs:
           override: true
           components: rustfmt
 
-      - name: Create working dir
-        run: |
-          mkdir ${{ matrix.crate }}
+      - name: Create working crate
+        run: make crates
 
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v1
