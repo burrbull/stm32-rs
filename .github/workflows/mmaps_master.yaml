@@ -1,7 +1,7 @@
 name: build mmaps
 
 env:
-  SVDTOOLS_VERSION: 0.2.3
+  SVDTOOLS_VERSION: Unreleased
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     name: Build mmaps
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     env:
       SVDTOOLS: svdtools
