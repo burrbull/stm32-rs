@@ -39,6 +39,7 @@ jobs:
         run: |
           ./scripts/tool_install.sh svdtools
           ./scripts/tool_install.sh svd2rust
+          ./scripts/tool_install.sh form
 
       - name: Patch SVDs
         run: cargo make patch
