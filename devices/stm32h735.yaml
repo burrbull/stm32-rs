@@ -776,6 +776,17 @@ OCTOSPI?:
 _delete:
   - HRTIM                       # RM0468 devices do not have an HRTIM
 
+HSEM:
+  _modify:
+    C1IER:
+      name: IER
+    C1ICR:
+      name: ICR
+    C1ISR:
+      name: ISR
+    C1MISR:
+      name: MISR
+
 SAI?:
   _strip:
     - SAI_
@@ -942,6 +953,7 @@ _include:
  - common_patches/dma/dma2d_v2.yaml
  - ../peripherals/dma/dma2d_v2.yaml
  - collect/hsem/r.yaml
+ - collect/hsem/isem.yaml
  - common_patches/adc/h7.yaml
  - common_patches/adc/h7_boost_rev_v.yaml
  - common_patches/octospi/h7.yaml

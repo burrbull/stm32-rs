@@ -71,21 +71,7 @@ EXTI:
         access: read-write
 
 HSEM:
-  _strip:
-    - HSEM_
-  _modify:
-    IER:
-      name:
-        C1IER
-    ICR:
-      name:
-        C1ICR
-    ISR:
-      name:
-        C1ISR
-    MISR:
-      name:
-        C1MISR
+  _strip: HSEM_
   "R[0-9],R1[0-5]":
     _modify:
       MASTERID:
@@ -193,6 +179,7 @@ _include:
  - ../peripherals/gpio/gpio_wl.yaml
  - ../peripherals/hsem/hsem_wl.yaml
  - collect/hsem/r.yaml
+ - collect/hsem/fields.yaml
  - ../peripherals/i2c/i2c_v2.yaml
  - ../peripherals/iwdg/iwdg.yaml
  - ../peripherals/iwdg/iwdg_sr.yaml

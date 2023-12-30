@@ -58,6 +58,7 @@ _include:
  - common_patches/dma/dma2d_v2.yaml
  - ../peripherals/dma/dma2d_v2.yaml
  - collect/hsem/r.yaml
+ - collect/hsem/isem.yaml
  - common_patches/adc/h7.yaml
  - common_patches/h7_spdifrx.yaml
  - common_patches/usb_otg/hs_v2.yaml

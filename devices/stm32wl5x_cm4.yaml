@@ -37,11 +37,17 @@ DAC:
       - "TSEL1*"
 
 HSEM:
-  _strip:
-    - HSEM_
+  _strip: HSEM_
+  _delete: ["HSEM_C2*"]
   _modify:
-    C2ICR:
-      access: read-write
+    C1IER:
+      name: IER
+    C1ICR:
+      name: ICR
+    C1ISR:
+      name: ISR
+    C1MISR:
+      name: MISR
 
 IPCC:
   _strip:
@@ -146,6 +152,7 @@ _include:
  - ../peripherals/gpio/gpio_wl.yaml
  - ../peripherals/hsem/hsem_wl.yaml
  - collect/hsem/r.yaml
+ - collect/hsem/fields.yaml
  - ../peripherals/ipcc/ipcc_wl.yaml
  - ../peripherals/i2c/i2c_v2.yaml
  - ../peripherals/iwdg/iwdg.yaml

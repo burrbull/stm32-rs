@@ -1,0 +1,21 @@
+HSEM:
+  IER:
+    _array:
+      "ISEM*":
+        name: ISE%s
+        description: Interrupt semaphore %s enable bit
+  ICR:
+    _array:
+      "ISEM*":
+        name: ISC%s
+        description: Interrupt semaphore %s clear bit
+  ISR:
+    _array:
+      "ISEM*":
+        name: ISF%s
+        description: Interrupt semaphore %s status bit before enable (mask)
+  MISR:
+    _array:
+      "ISEM*":
+        name: MISF%s
+        description: Masked interrupt semaphore %s status bit after enable (mask)
