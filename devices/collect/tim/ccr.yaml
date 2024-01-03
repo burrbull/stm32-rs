@@ -21,7 +21,7 @@
         description: Capture/Compare %s output Polarity
       "?~CC?NE":
         description: Capture/Compare %s complementary output enable
-  "CCMR[12]_Input":
+  CCMR1_Input:
     _array:
       CC?S:
         description: Capture/Compare %s selection
@@ -29,11 +29,54 @@
         description: Input capture %s prescaler
       IC?F:
         description: Input capture %s filter
-  "CCMR[12]_Output":
+  "?~CCMR2_Input":
+    _modify:
+      CC?S:
+        derivedFrom: "`block_path`.CCMR1_Input.CC%sS"
+      IC?PSC:
+        derivedFrom: "`block_path`.CCMR1_Input.IC%sPSC"
+      IC?F:
+        derivedFrom: "`block_path`.CCMR1_Input.IC%sF"
     _array:
       CC?S:
         description: Capture/Compare %s selection
-  CCMR?_Output:
+      IC?PSC:
+        description: Input capture %s prescaler
+      IC?F:
+        description: Input capture %s filter
+  CCMR1_Output:
+    _array:
+      CC?S:
+        description: Capture/Compare %s selection
+      OC?FE:
+        description: Output compare %s fast enable
+      OC?PE:
+        description: Output compare %s preload enable
+      OC?M:
+        description: Output compare %s mode
+      "?~OC?CE":
+        description: Output compare %s clear enable
+      "?~OC?M_3":
+        description: Output compare %s mode, bit 3
+  "?~CCMR2_Output":
+    _modify:
+      CC?S:
+        derivedFrom: "`block_path`.CCMR1_Output.CC%sS"
+    _array:
+      CC?S:
+        description: Capture/Compare %s selection
+  "?~CCMR[23]_Output":
+    _modify:
+      OC?FE:
+        derivedFrom: "`block_path`.CCMR1_Output.OC%sFE"
+      OC?PE:
+        derivedFrom: "`block_path`.CCMR1_Output.OC%sPE"
+      OC?M:
+        derivedFrom: "`block_path`.CCMR1_Output.OC%sM"
+      "?~OC?CE":
+        derivedFrom: "`block_path`.CCMR1_Output.OC%sCE"
+      "?~OC?M_3":
+        derivedFrom: "`block_path`.CCMR1_Output.OC%sM_3"
     _array:
       OC?FE:
         description: Output compare %s fast enable
