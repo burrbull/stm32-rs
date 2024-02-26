@@ -69,17 +69,29 @@ RCC:
       HSI_KER: [4, "HSI kernel clock selected as clock source (hsi_ker_ck)"]
       CSI_KER: [5, "CSI kernel clock selected as clock source (csi_ker_ck)"]
 
-  "A?B?RSTR,A?B??RSTR":
+  AHB1RSTR:
     "*RST":
+      _name: Reset
       Reset: [1, "Reset the selected module"]
-  "A?B?ENR,A?B??ENR,C1_A?B?ENR,C1_A?B??ENR":
+  "AHB[2-4]RSTR,APB?RSTR,A?B??RSTR":
+    _modify:
+      "*RST":
+        derivedFrom: RCC.AHB1RSTR.GPDMA1RST
+  AHB1ENR:
     "*EN":
       _name: Enable
       Disabled: [0, "The selected clock is disabled"]
       Enabled: [1, "The selected clock is enabled"]
-  "A?B?LPENR,A?B??LPENR,C1_A?B?LPENR,C1_A?B??LPENR":
+  "AHB[2-4]ENR,APB?ENR,A?B??ENR,C1_A?B?ENR,C1_A?B??ENR":
+    _modify:
+      "*EN":
+        derivedFrom: RCC.AHB1ENR.GPDMA1EN
+  AHB1LPENR:
     "*LPEN":
       _name: LPEnable
       Disabled: [0, "The selected clock is disabled during csleep mode"]
       Enabled: [1, "The selected clock is enabled during csleep mode"]
-
+  "AHB[2-4]LPENR,APB?LPENR,A?B??LPENR,C1_A?B?LPENR,C1_A?B??LPENR":
+    _modify:
+      "*LPEN":
+        derivedFrom: RCC.AHB1LPENR.GPDMA1LPEN

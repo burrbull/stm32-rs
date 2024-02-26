@@ -240,6 +240,7 @@ RCC:
 
   "A?B?RSTR,A?BRSTR,A?B?RSTR?":
     "*RST":
+      _name: Reset
       Reset: [1, "Reset the selected module"]
   "A?B?ENR,A?BENR,A?B?ENR?":
     "*EN":

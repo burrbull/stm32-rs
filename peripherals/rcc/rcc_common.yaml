@@ -52,14 +52,23 @@ RCC:
       _read:
         NotInterrupted: [0, "No clock ready interrupt"]
         Interrupted: [1, "Clock ready interrupt"]
-  "A?B?RSTR,A?BRSTR":
+  APB1RSTR:
     "*RST":
+      _name: Reset
       Reset: [1, "Reset the selected module"]
-  "A?B?ENR,A?BENR":
+  "AHB?RSTR,APB[2-4]RSTR,A?BRSTR":
+    _modify:
+      "*RST":
+        derivedFrom: RCC.APB1RSTR.TIM2RST
+  APB1ENR:
     "*EN":
       _name: Enable
       Disabled: [0, "The selected clock is disabled"]
       Enabled: [1, "The selected clock is enabled"]
+  "AHB?ENR,APB[2-4]ENR,A?BENR":
+    _modify:
+      "*EN":
+        derivedFrom: RCC.APB1ENR.TIM2EN
   BDCR:
     BDRST:
       Disabled: [0, "Reset not activated"]

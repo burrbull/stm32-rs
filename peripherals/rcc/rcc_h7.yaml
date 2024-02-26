@@ -8,20 +8,29 @@ _include:
   - ./rcc_v3_h7_ccip.yaml
 
 RCC:
-  "A?B?RSTR,A?B??RSTR":
+  AHB1RSTR:
     "*RST":
+      _name: Reset
       Reset: [1, "Reset the selected module"]
+  "AHB[2-4]RSTR,APB?RSTR,A?B??RSTR":
+    _modify:
+      "*RST":
+        derivedFrom: RCC.AHB1RSTR.DMA1RST
   AHB1ENR:
     "*EN":
       _name: Enable
       Disabled: [0, "The selected clock is disabled"]
       Enabled: [1, "The selected clock is enabled"]
-  "A?B?ENR,A?B??ENR,C1_A?B?ENR,C1_A?B??ENR":
+  "AHB[2-4]ENR,APB?ENR,A?B??ENR,C1_A?B?ENR,C1_A?B??ENR":
     _modify:
       "*EN":
         derivedFrom: RCC.AHB1ENR.DMA1EN
-  "A?B?LPENR,A?B??LPENR,C1_A?B?LPENR,C1_A?B??LPENR":
+  AHB1LPENR:
     "*LPEN":
       _name: LPEnable
       Disabled: [0, "The selected clock is disabled during csleep mode"]
       Enabled: [1, "The selected clock is enabled during csleep mode"]
+  "AHB[2-4]LPENR,APB?LPENR,A?B??LPENR,C1_A?B?LPENR,C1_A?B??LPENR":
+    _modify:
+      "*LPEN":
+        derivedFrom: RCC.AHB1LPENR.DMA1LPEN

@@ -66,14 +66,23 @@ RCC:
       HSI: [1, "HSI selected as system clock"]
       HSE: [2, "HSE selected as system clock"]
       PLL: [3, "PLL selected as system clock"]
-  "A?B?RSTR,A?BRSTR,A?B?RSTR?,A?BRSTR?":
+  APB1RSTR:
     "*RST":
+      _name: Reset
       Reset: [1, "Reset the selected module"]
-  "A?B?ENR,A?BENR,A?B?ENR?,A?BENR?":
+  "AHB?RSTR,APB[2-4]RSTR,A?BRSTR,A?B?RSTR?,A?BRSTR?":
+    _modify:
+      "*RST":
+        derivedFrom: RCC.APB1ENR.TIM2EN
+  APB1ENR:
     "*EN":
       _name: Enable
       Disabled: [0, "The selected clock is disabled"]
       Enabled: [1, "The selected clock is enabled"]
+  "AHB?ENR,APB[2-4]ENR,A?BENR,A?B?ENR?,A?BENR?":
+    _modify:
+      "*EN":
+        derivedFrom: RCC.APB1ENR.TIM2EN
   BDCR:
     LSCOSEL:
       LSI: [0, LSI clock selected"]
