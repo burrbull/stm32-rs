@@ -68,3 +68,18 @@ RCC:
       HSE: [3, "HSE clock selected as clock source (hse_ck)"]
       HSI_KER: [4, "HSI kernel clock selected as clock source (hsi_ker_ck)"]
       CSI_KER: [5, "CSI kernel clock selected as clock source (csi_ker_ck)"]
+
+  "A?B?RSTR,A?B??RSTR":
+    "*RST":
+      Reset: [1, "Reset the selected module"]
+  "A?B?ENR,A?B??ENR,C1_A?B?ENR,C1_A?B??ENR":
+    "*EN":
+      _name: Enable
+      Disabled: [0, "The selected clock is disabled"]
+      Enabled: [1, "The selected clock is enabled"]
+  "A?B?LPENR,A?B??LPENR,C1_A?B?LPENR,C1_A?B??LPENR":
+    "*LPEN":
+      _name: LPEnable
+      Disabled: [0, "The selected clock is disabled during csleep mode"]
+      Enabled: [1, "The selected clock is enabled during csleep mode"]
+

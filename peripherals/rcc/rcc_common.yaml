@@ -57,6 +57,7 @@ RCC:
       Reset: [1, "Reset the selected module"]
   "A?B?ENR,A?BENR":
     "*EN":
+      _name: Enable
       Disabled: [0, "The selected clock is disabled"]
       Enabled: [1, "The selected clock is enabled"]
   BDCR:

@@ -6,3 +6,22 @@ _include:
   - ./rcc_v3_d3amr_srdamr.yaml
   - ./rcc_v3_pll.yaml
   - ./rcc_v3_h7_ccip.yaml
+
+RCC:
+  "A?B?RSTR,A?B??RSTR":
+    "*RST":
+      Reset: [1, "Reset the selected module"]
+  AHB1ENR:
+    "*EN":
+      _name: Enable
+      Disabled: [0, "The selected clock is disabled"]
+      Enabled: [1, "The selected clock is enabled"]
+  "A?B?ENR,A?B??ENR,C1_A?B?ENR,C1_A?B??ENR":
+    _modify:
+      "*EN":
+        derivedFrom: RCC.AHB1ENR.DMA1EN
+  "A?B?LPENR,A?B??LPENR,C1_A?B?LPENR,C1_A?B??LPENR":
+    "*LPEN":
+      _name: LPEnable
+      Disabled: [0, "The selected clock is disabled during csleep mode"]
+      Enabled: [1, "The selected clock is enabled during csleep mode"]

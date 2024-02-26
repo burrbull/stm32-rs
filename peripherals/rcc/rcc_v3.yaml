@@ -72,9 +72,6 @@ RCC:
     LSEON:
       "Off": [0, "LSE oscillator Off"]
       "On": [1, "LSE oscillator On"]
-  "A?B?RSTR,A?B??RSTR":
-    "*RST":
-      Reset: [1, "Reset the selected module"]
   RSR,C1_RSR:
     "*RSTF":
       _read:
@@ -83,11 +80,3 @@ RCC:
     RMVF:
       NotActivated: [0, "Reset not activated"]
       Reset: [1, "Reset the reset status flags"]
-  "A?B?ENR,A?B??ENR,C1_A?B?ENR,C1_A?B??ENR":
-    "*EN":
-      Disabled: [0, "The selected clock is disabled"]
-      Enabled: [1, "The selected clock is enabled"]
-  "A?B?LPENR,A?B??LPENR,C1_A?B?LPENR,C1_A?B??LPENR":
-    "*LPEN":
-      Disabled: [0, "The selected clock is disabled during csleep mode"]
-      Enabled: [1, "The selected clock is enabled during csleep mode"]

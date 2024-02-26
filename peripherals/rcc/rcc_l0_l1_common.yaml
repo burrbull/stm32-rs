@@ -59,19 +59,21 @@ RCC:
   AHBRSTR:
     "*RST":
       _write:
+        _name: Reset
         Reset: [1, "Reset the module"]
   "APB[12]RSTR":
-    "*RST":
-      _write:
-        Reset: [1, "Reset the module"]
+    _modify:
+      "*RST":
+        derivedFrom: RCC.AHBRSTR.DMARST
   AHBENR:
     "*EN":
+      _name: Enable
       Disabled: [0, "Clock disabled"]
       Enabled: [1, "Clock enabled"]
   "APB*ENR":
-    "*EN":
-      Disabled: [0, "Clock disabled"]
-      Enabled: [1, "Clock enabled"]
+    _modify:
+      "*EN":
+        derivedFrom: RCC.AHBENR.DMAEN
   CSR:
     "*RSTF":
       _read:

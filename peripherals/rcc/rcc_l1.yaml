@@ -53,5 +53,6 @@ RCC:
         Stable: [1, "Clock is stable"]
   "AHBLPENR":
     "*EN":
+      _name: Enable
       Disabled: [0, "Clock disabled"]
       Enabled: [1, "Clock enabled"]
